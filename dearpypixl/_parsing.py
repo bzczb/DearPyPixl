@@ -161,8 +161,6 @@ def item_definitions() -> Mapping[str, ItemDefinition]:
     commands_to_names = {
         dearpygui.add_2d_histogram_series: "mv2dHistogramSeries",
         dearpygui.add_3d_slider          : "mvSlider3D",
-        dearpygui.add_hline_series       : "mvHLineSeries",
-        dearpygui.add_vline_series       : "mvVLineSeries",
         dearpygui.add_plot_annotation    : "mvAnnotation",
         dearpygui.add_text_point         : "mvLabelSeries",
         dearpygui.draw_image             : 'mvDrawImage',
