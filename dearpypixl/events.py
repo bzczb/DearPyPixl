@@ -14,13 +14,6 @@ from . import (
     _interface,
     _tools,
 )
-# BUG: DPG leaks callback arguments. `user_data` is leaked
-# in some cases, but `app_data` leaks are plentiful and can
-# be a BIG problem. Non-container values are sometimes fine;
-# even if these do leak, they're not the primary concern.
-# Containters though...we decref those. We decref those to
-# *heck*.
-from ._tools import Py_DECREF
 from ._typing import (
     Any,
     Item,
@@ -454,7 +447,6 @@ class InputRecorder(_InputPoller):
             self._inputs.append(
                 (time.time(), self.KEY_DOWN, (_KEYCODE_MAP[key_info[0]], key_info[1]))
             )
-            Py_DECREF(key_info)
 
 
     MOUSE_DOWN = InputEvent.MOUSE_DOWN
@@ -464,7 +456,6 @@ class InputRecorder(_InputPoller):
             self._inputs.append(
                 (time.time(), self.MOUSE_DOWN, (_PTRCODE_MAP[key_info[0]], key_info[1]))
             )
-            Py_DECREF(key_info)
 
 
     KEY_UP = InputEvent.KEY_UP
@@ -486,7 +477,6 @@ class InputRecorder(_InputPoller):
     def _cb_mouse_move(self, handler:  Item, cursor_pos: tuple[float, float]):
         with self.lock:
             self._inputs.append((time.time(), self.MOUSE_MOVE, tuple(cursor_pos)))
-            Py_DECREF(cursor_pos)
 
 
     MOUSE_DRAG = InputEvent.MOUSE_DRAG
@@ -495,7 +485,6 @@ class InputRecorder(_InputPoller):
         key, x_pos_dt, y_pos_dt = drag_data
         with self.lock:
             self._inputs.append((time.time(), self.MOUSE_DRAG, (_PTRCODE_MAP[key], x_pos_dt, y_pos_dt)))
-            Py_DECREF(drag_data)
 
 
     MOUSE_V_SCROLL = InputEvent.MOUSE_V_SCROLL
@@ -617,7 +606,6 @@ class KeyPoller(_InputPoller):
             self.last_pressed = key
             if key not in self._inputs:
                 self._inputs.append(key)
-            Py_DECREF(key_info)
 
 
     last_released = 0
@@ -684,7 +672,6 @@ class MousePoller(_InputPoller):
             self.last_pressed = mkey
             if mkey not in self._inputs:
                 self._inputs.append(mkey)
-            Py_DECREF(key_info)
 
 
     last_released = 0
@@ -701,7 +688,6 @@ class MousePoller(_InputPoller):
 
     def _cb_mouse_scroll(self, handler: Item, mscroll: int):
         self.last_scroll = mscroll
-        Py_DECREF(mscroll)
 
 
     last_drag_delta = (0, 0.0, 0.0)
@@ -709,14 +695,12 @@ class MousePoller(_InputPoller):
     def _cb_mouse_drag(self, handler: Item, mdrag_info: tuple[int, float, float]):
         mkey, dt_xpos, dt_ypos =  mdrag_info
         self.last_drag_delta = _PTRCODE_MAP[mkey], dt_xpos, dt_ypos
-        Py_DECREF(mdrag_info)
 
 
     cursor_pos = (0.0, 0.0)
 
     def _cb_mouse_move(self, handler: Item, pos: tuple[float, float]):
         self.cursor_pos = pos
-        Py_DECREF(pos)
 
 
 

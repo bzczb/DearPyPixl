@@ -672,16 +672,6 @@ def cfunction(pfunction: 'ctypes._NamedFuncPointer', argtypes: tuple[Any, ...] =
     return func_prototype
 
 
-# used to cork c-extension memory leaks
-@cfunction(ctypes.pythonapi.Py_DecRef, (ctypes.py_object,))
-def Py_DECREF(_object: Any) -> None:
-    """Reduce the reference count of a Python object by one.
-
-    An object may be deconstructed (garbage collected) when its
-    reference count reaches zero.
-    """
-
-
 
 
 def timed(fn: Callable[_P, _T]) -> Callable[_P, _T]:
