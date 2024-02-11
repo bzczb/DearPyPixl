@@ -48,7 +48,6 @@ class _CtxMenuStack(collections.deque[tuple['ContextMenu', 'ContextItem | None']
         '''Close all context menus when a mouse down event is
         captured while the cursor is away from them.'''
         duration = mdown_info[1]
-        events.Py_DECREF(mdown_info)
         # ignore long-press/drag events
         if duration >= 0.05 or self.hovered_menu():
             return
