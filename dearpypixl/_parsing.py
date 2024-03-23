@@ -146,6 +146,7 @@ def item_definitions() -> Mapping[str, ItemDefinition]:
     def set_item_types():
         nonlocal name_to_enum
         dearpygui.create_context()
+        dearpygui.setup_dearpygui()
         name_to_enum = dearpygui.get_item_types()
         dearpygui.destroy_context()
 
