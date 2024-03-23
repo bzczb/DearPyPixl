@@ -473,7 +473,7 @@ class Application(_typing.ItemInterface, int, metaclass=_ApplicationMeta):
         # There's a 'DPG version' hook through `get_app_configuration`
         # but it requires created context.
         """[get] Return Dear PyGui's version number."""
-        return importlib.metadata.version('dearpygui')
+        return importlib.metadata.version('dearpygui-gram')
 
     @final
     @staticmethod
